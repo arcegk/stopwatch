@@ -3,8 +3,8 @@ import Timer from './Timer';
 import TimePickerWrapper from './TimePickerWrapper';
 import './App.css';
 import 'rc-time-picker/assets/index.css';
-import beep from '../../public/beep.mp3';
-import beepStart from '../../public/beepstart.mp3';
+import beep from './beep.mp3';
+import beepStart from './beepstart.mp3';
 
 class App extends Component {
 
@@ -31,7 +31,7 @@ class App extends Component {
       let loops = 0;
       const ticker = (e) => {
         loops++;
-        this.beepStart.play();
+        this.beepStart.current.play();
         let counter_helper = this.state.time;
         let counter_helper_rest = this.state.pause_time;
         this.setState({'on_pause': false});
@@ -39,7 +39,7 @@ class App extends Component {
           counter_helper = counter_helper - 1;
           this.setState({'time_counter': counter_helper});
           if (counter_helper === 0){
-            this.beep.play();
+            this.beep.current.play();
             clearInterval(interval);
             this.setState({'on_pause': true});
             if(loops < this.state.repetitions){
