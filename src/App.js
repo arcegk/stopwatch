@@ -3,8 +3,8 @@ import Timer from './Timer';
 import TimePickerWrapper from './TimePickerWrapper';
 import './App.css';
 import 'rc-time-picker/assets/index.css';
-import beep from './beep.mp3';
-import beepStart from './beepstart.mp3';
+import beepSound from './beep.mp3';
+import beepStartSound from './beepstart.mp3';
 
 class App extends Component {
 
@@ -17,8 +17,8 @@ class App extends Component {
     'initial_time': '',
     'running': false
   }
-  beep = React.createRef();
-  beepStart = React.createRef();
+  beepEnd = new Audio(beepSound);
+  beepStart = new Audio(beepStartSound);
 
   onChangeValue = (e) => {
       let updateObj = {[e.target.name]: parseInt(e.target.value)}
@@ -31,15 +31,18 @@ class App extends Component {
       let loops = 0;
       const ticker = (e) => {
         loops++;
-        this.beepStart.current.play();
-        let counter_helper = this.state.time;
-        let counter_helper_rest = this.state.pause_time;
+        this.beepStart.play();
+        this.beepEnd.muted = true;
+        this.beepEnd.play();
+        let counter_helper = this.state.time + 1;
+        let counter_helper_rest = this.state.pause_time + 1;
         this.setState({'on_pause': false});
         let interval = setInterval((e) =>{
           counter_helper = counter_helper - 1;
           this.setState({'time_counter': counter_helper});
           if (counter_helper === 0){
-            this.beep.current.play();
+            this.beepEnd.muted = false;
+            this.beepEnd.play();
             clearInterval(interval);
             this.setState({'on_pause': true});
             if(loops < this.state.repetitions){
@@ -66,7 +69,7 @@ class App extends Component {
           if (loops === this.state.repetitions){
             clearInterval(repeatedFunc);
           }
-        }, (this.state.time + this.state.pause_time) *1000);
+        }, (this.state.time + this.state.pause_time + 2 ) *1000);
     }
   }
   }
@@ -93,8 +96,6 @@ class App extends Component {
   render() {
     return (
       <div className="container-fluid">
-      <audio ref={this.beep} src={beep}></audio>
-      <audio ref={this.beepStart} src={beepStart}></audio>
         <Timer time_counter={this.state.time_counter} on_pause={this.state.on_pause}/>
         <div className="col-md-12">
           <div className="row">
