@@ -1,3 +1,7 @@
+### Stopwatch with intervals
+
+Simple webapp for my archery training
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
